@@ -1,7 +1,9 @@
+import ServiceManagement
 import SwiftUI
 
 struct GeneralSettingsTab: View {
     @Environment(AppState.self) private var appState
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     private static let menuBarExamples: [(label: String, format: String)] = [
         ("Time", "HH:mm"),
@@ -42,6 +44,21 @@ struct GeneralSettingsTab: View {
                 TextField("Date format pattern", text: $appState.worldClockFormat)
                 Text("Preview: \(worldClockPreview)")
                     .foregroundStyle(.secondary)
+            }
+
+            Section("System") {
+                Toggle("Launch at login", isOn: $launchAtLogin)
+                    .onChange(of: launchAtLogin) { _, newValue in
+                        do {
+                            if newValue {
+                                try SMAppService.mainApp.register()
+                            } else {
+                                try SMAppService.mainApp.unregister()
+                            }
+                        } catch {
+                            launchAtLogin = SMAppService.mainApp.status == .enabled
+                        }
+                    }
             }
 
             Section {

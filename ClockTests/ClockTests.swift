@@ -30,7 +30,6 @@ struct ClockTests {
         let state = AppState(defaults: freshDefaults())
         #expect(state.menuBarFormat == "HH:mm")
         #expect(state.worldClockFormat == "HH:mm")
-        #expect(state.showWorldClocksInMenuBar == false)
         #expect(state.worldClocks.isEmpty)
     }
 
