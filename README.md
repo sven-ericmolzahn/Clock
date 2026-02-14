@@ -4,6 +4,12 @@ A lightweight macOS menubar app for keeping track of time across the world.
 
 Clock lives in your menu bar and shows the current time in a fully customizable format. Click it to see all your configured world clocks at a glance, complete with country flags, day/night indicators, and upcoming public holidays.
 
+## Screenshots
+
+| Menu Bar Panel | Settings — General | Settings — World Clocks |
+|:-:|:-:|:-:|
+| ![Menu bar panel with world clocks, flags, holidays, and time converter](screenshots/menubar-panel.png) | ![General settings with format presets](screenshots/settings-general.png) | ![World clocks settings with cards and map picker](screenshots/settings-world-clocks.png) |
+
 ## Features
 
 - **Menubar clock** with customizable format (24h, 12h, calendar week, date, and more)
