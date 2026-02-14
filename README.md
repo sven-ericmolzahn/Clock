@@ -49,6 +49,18 @@ Clock is a SwiftUI menubar-only app (`LSUIElement = YES`) with no dock icon or m
 
 Settings and world clocks are persisted via UserDefaults.
 
+## Contributing
+
+Contributions are welcome. To get started:
+
+1. Fork the repository
+2. Open `Clock.xcodeproj` in Xcode 26 — it will auto-sign with your personal development certificate
+3. Create a feature branch and make your changes
+4. Make sure the project builds cleanly
+5. Open a pull request with a clear description of what you changed and why
+
+If you're planning a larger change, consider opening an issue first to discuss the approach.
+
 ## License
 
-This project is provided as-is for personal use.
+This project is licensed under the [MIT License](LICENSE).
