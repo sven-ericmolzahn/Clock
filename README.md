@@ -23,14 +23,26 @@ Clock lives in your menu bar and shows the current time in a fully customizable 
 - **Drag to reorder** — arrange your clocks in the order you prefer
 - **Inline label editing** — rename any clock directly in settings
 
-## Requirements
+## Installation
 
-- macOS 26.1 or later
-- Xcode 26 (to build from source)
-
-## Build
+### Homebrew
 
 ```bash
+brew tap sven-ericmolzahn/clock
+brew install --cask clock
+```
+
+### Download
+
+Download the latest DMG from the [Releases](https://github.com/sven-ericmolzahn/Clock/releases) page, open it, and drag Clock to your Applications folder.
+
+### Build from source
+
+Requires macOS 26.1 and Xcode 26.
+
+```bash
+git clone https://github.com/sven-ericmolzahn/Clock.git
+cd Clock
 xcodebuild -project Clock.xcodeproj -scheme Clock build
 ```
 
