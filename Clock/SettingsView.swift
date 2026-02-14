@@ -8,6 +8,6 @@ struct SettingsView: View {
             WorldClocksSettingsTab()
                 .tabItem { Label("World Clocks", systemImage: "globe") }
         }
-        .frame(width: 550, height: 500)
+        .frame(width: 550, height: 560)
     }
 }
