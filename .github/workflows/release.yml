@@ -117,3 +117,39 @@ jobs:
         with:
           files: ${{ runner.temp }}/Clock.dmg
           generate_release_notes: true
+
+      - name: Update Homebrew tap
+        env:
+          TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SHA256=$(shasum -a 256 "$RUNNER_TEMP/$APP_NAME.dmg" | awk '{print $1}')
+
+          git clone https://x-access-token:${TAP_GITHUB_TOKEN}@github.com/sven-ericmolzahn/homebrew-clock.git $RUNNER_TEMP/tap
+
+          cat > $RUNNER_TEMP/tap/Casks/clock.rb << CASK
+          cask "clock" do
+            version "${VERSION}"
+            sha256 "${SHA256}"
+
+            url "https://github.com/sven-ericmolzahn/Clock/releases/download/v#{version}/Clock.dmg"
+            name "Clock"
+            desc "Menubar world clock with holidays, flags, and time converter"
+            homepage "https://github.com/sven-ericmolzahn/Clock"
+
+            depends_on macos: ">= :tahoe"
+
+            app "Clock.app"
+
+            zap trash: [
+              "~/Library/Preferences/com.molzahn.Clock.plist",
+            ]
+          end
+          CASK
+
+          cd $RUNNER_TEMP/tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Casks/clock.rb
+          git commit -m "Update Clock to ${VERSION}"
+          git push
