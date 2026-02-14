@@ -9,47 +9,43 @@ final class AppState {
     }
 
     var menuBarFormat: String {
-        didSet { UserDefaults.standard.set(menuBarFormat, forKey: "menuBarFormat") }
+        didSet { defaults.set(menuBarFormat, forKey: "menuBarFormat") }
     }
 
     var worldClockFormat: String {
-        didSet { UserDefaults.standard.set(worldClockFormat, forKey: "worldClockFormat") }
-    }
-
-    var showWorldClocksInMenuBar: Bool {
-        didSet { UserDefaults.standard.set(showWorldClocksInMenuBar, forKey: "showWorldClocksInMenuBar") }
+        didSet { defaults.set(worldClockFormat, forKey: "worldClockFormat") }
     }
 
     var currentDate: Date = Date()
 
+    let holidayService = HolidayService()
+
     private var timer: Timer?
+    private let defaults: UserDefaults
 
     var menuBarText: String {
         let formatter = DateFormatter()
         formatter.dateFormat = menuBarFormat
         var text = formatter.string(from: currentDate)
 
-        if showWorldClocksInMenuBar {
-            let parts = worldClocks.compactMap { clock -> String? in
-                guard let tz = clock.timeZone else { return nil }
-                formatter.timeZone = tz
-                formatter.dateFormat = worldClockFormat
-                return "\(clock.label) \(formatter.string(from: currentDate))"
-            }
-            if !parts.isEmpty {
-                text += " | " + parts.joined(separator: " | ")
-            }
+        let parts = worldClocks.filter(\.showInMenuBar).compactMap { clock -> String? in
+            guard let tz = clock.timeZone else { return nil }
+            formatter.timeZone = tz
+            formatter.dateFormat = worldClockFormat
+            return "\(clock.label) \(formatter.string(from: currentDate))"
+        }
+        if !parts.isEmpty {
+            text += " | " + parts.joined(separator: " | ")
         }
 
         return text
     }
 
-    init() {
-        let defaults = UserDefaults.standard
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
 
         self.menuBarFormat = defaults.string(forKey: "menuBarFormat") ?? "HH:mm"
         self.worldClockFormat = defaults.string(forKey: "worldClockFormat") ?? "HH:mm"
-        self.showWorldClocksInMenuBar = defaults.bool(forKey: "showWorldClocksInMenuBar")
 
         if let data = defaults.data(forKey: "worldClocks"),
            let decoded = try? JSONDecoder().decode([WorldClock].self, from: data) {
@@ -59,6 +55,7 @@ final class AppState {
         }
 
         startTimer()
+        refreshHolidays()
     }
 
     private func startTimer() {
@@ -69,12 +66,14 @@ final class AppState {
 
     private func saveWorldClocks() {
         if let data = try? JSONEncoder().encode(worldClocks) {
-            UserDefaults.standard.set(data, forKey: "worldClocks")
+            defaults.set(data, forKey: "worldClocks")
         }
     }
 
-    func addWorldClock(label: String, timeZoneIdentifier: String) {
-        worldClocks.append(WorldClock(label: label, timeZoneIdentifier: timeZoneIdentifier))
+    func addWorldClock(label: String, timeZoneIdentifier: String, countryCode: String? = nil) {
+        let clock = WorldClock(label: label, timeZoneIdentifier: timeZoneIdentifier, countryCode: countryCode)
+        worldClocks.append(clock)
+        holidayService.fetchIfNeeded(for: clock)
     }
 
     func removeWorldClocks(at offsets: IndexSet) {
@@ -83,5 +82,11 @@ final class AppState {
 
     func moveWorldClocks(from source: IndexSet, to destination: Int) {
         worldClocks.move(fromOffsets: source, toOffset: destination)
+    }
+
+    func refreshHolidays() {
+        for clock in worldClocks {
+            holidayService.fetchIfNeeded(for: clock)
+        }
     }
 }

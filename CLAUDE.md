@@ -29,7 +29,9 @@ Or open `Clock.xcodeproj` in Xcode and use Cmd+R to run, Cmd+U to test.
 - **WorldClockRow.swift** — Single world clock: label, UTC offset, formatted time
 - **SettingsView.swift** — `TabView` with General and World Clocks tabs
 - **GeneralSettingsTab.swift** — Format pattern fields with live previews, menubar toggle
-- **WorldClocksSettingsTab.swift** — Add/remove/reorder world clocks with time zone picker
+- **WorldClocksSettingsTab.swift** — Add/remove/reorder world clocks with map-based timezone picker
+- **MapTimeZonePicker.swift** — Interactive MapKit map for selecting timezones by clicking locations
+- **MapTimeZonePickerViewModel.swift** — `@Observable` geocoding logic using `MKReverseGeocodingRequest`
 
 ## Key Conventions
 

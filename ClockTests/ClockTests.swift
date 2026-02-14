@@ -4,6 +4,13 @@ import Foundation
 
 struct ClockTests {
 
+    private func freshDefaults() -> UserDefaults {
+        let name = "ClockTests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: name)!
+        defaults.removePersistentDomain(forName: name)
+        return defaults
+    }
+
     @Test func worldClockRoundtrip() throws {
         let clock = WorldClock(label: "Tokyo", timeZoneIdentifier: "Asia/Tokyo")
         let data = try JSONEncoder().encode(clock)
@@ -20,9 +27,7 @@ struct ClockTests {
     }
 
     @Test func appStateDefaultFormats() {
-        let defaults = UserDefaults(suiteName: "ClockTests")!
-        defaults.removePersistentDomain(forName: "ClockTests")
-        let state = AppState()
+        let state = AppState(defaults: freshDefaults())
         #expect(state.menuBarFormat == "HH:mm")
         #expect(state.worldClockFormat == "HH:mm")
         #expect(state.showWorldClocksInMenuBar == false)
@@ -30,14 +35,14 @@ struct ClockTests {
     }
 
     @Test func appStateMenuBarText() {
-        let state = AppState()
+        let state = AppState(defaults: freshDefaults())
         state.menuBarFormat = "HH:mm"
         let text = state.menuBarText
         #expect(!text.isEmpty)
     }
 
     @Test func appStateAddRemoveClocks() {
-        let state = AppState()
+        let state = AppState(defaults: freshDefaults())
         state.addWorldClock(label: "London", timeZoneIdentifier: "Europe/London")
         #expect(state.worldClocks.count == 1)
         #expect(state.worldClocks[0].label == "London")
@@ -51,7 +56,7 @@ struct ClockTests {
     }
 
     @Test func appStateMoveClocks() {
-        let state = AppState()
+        let state = AppState(defaults: freshDefaults())
         state.addWorldClock(label: "A", timeZoneIdentifier: "Europe/London")
         state.addWorldClock(label: "B", timeZoneIdentifier: "Asia/Tokyo")
         state.addWorldClock(label: "C", timeZoneIdentifier: "America/New_York")
