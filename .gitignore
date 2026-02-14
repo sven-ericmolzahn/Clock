@@ -1,0 +1,23 @@
+# Claude Code
+CLAUDE.md
+
+# Xcode user data
+xcuserdata/
+*.xcuserdatad/
+
+# Xcode build
+build/
+DerivedData/
+*.xcarchive
+
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Signing
+*.p12
+*.mobileprovision
+*.provisionprofile
