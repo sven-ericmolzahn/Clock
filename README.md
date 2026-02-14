@@ -20,6 +20,7 @@ Clock lives in your menu bar and shows the current time in a fully customizable 
 - **Tomorrow/yesterday badge** — clearly marks when a clock's date differs from yours
 - **Country flags** — derived automatically from the timezone
 - **Quick time converter** — type a time (e.g. "15:00") and instantly see what that is in every configured timezone
+- **Launch at login** — optionally start Clock when you log in
 - **Drag to reorder** — arrange your clocks in the order you prefer
 - **Inline label editing** — rename any clock directly in settings
 
@@ -63,7 +64,7 @@ Clock is a SwiftUI menubar-only app (`LSUIElement = YES`) with no dock icon or m
 - **WorldClock** — `Codable` model storing label, timezone identifier, country code, and menu bar visibility
 - **HolidayService** — fetches upcoming public holidays per country from the Nager.Date API, with a timezone-to-country fallback via the system zone.tab file
 - **MapTimeZonePicker** — interactive MapKit map with floating overlay cards for adding clocks by click or search
-- **Settings** — tabbed window with General (format presets, world clock format) and World Clocks (card-based list with inline editing, reorder, per-clock menu bar toggle)
+- **Settings** — tabbed window with General (format presets, world clock format, launch at login) and World Clocks (card-based list with inline editing, reorder, per-clock menu bar toggle)
 
 Settings and world clocks are persisted via UserDefaults.
 
