@@ -21,6 +21,7 @@ final class AppState {
     let holidayService = HolidayService()
 
     private var timer: Timer?
+    private var lastHolidayRefresh: Date = .distantPast
     private let defaults: UserDefaults
 
     var menuBarText: String {
@@ -60,7 +61,13 @@ final class AppState {
 
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            self?.currentDate = Date()
+            guard let self else { return }
+            self.currentDate = Date()
+
+            if self.currentDate.timeIntervalSince(self.lastHolidayRefresh) > 60 * 60 {
+                self.lastHolidayRefresh = self.currentDate
+                self.refreshHolidays()
+            }
         }
     }
 

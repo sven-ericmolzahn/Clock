@@ -12,7 +12,9 @@ final class HolidayService {
     var nextHolidays: [String: PublicHoliday] = [:]
 
     private var cache: [String: [PublicHoliday]] = [:]
+    private var fetchedAt: [String: Date] = [:]
     private var inFlight: Set<String> = []
+    private static let staleInterval: TimeInterval = 24 * 60 * 60
 
     private static let timeZoneToCountry: [String: String] = {
         guard let contents = try? String(contentsOfFile: "/usr/share/zoneinfo/zone.tab", encoding: .utf8) else {
@@ -44,7 +46,11 @@ final class HolidayService {
 
     func fetchIfNeeded(for clock: WorldClock) {
         guard let code = resolveCountryCode(for: clock)?.uppercased(), !code.isEmpty else { return }
-        guard cache[code] == nil, !inFlight.contains(code) else { return }
+        guard !inFlight.contains(code) else { return }
+
+        let lastFetch = fetchedAt[code] ?? .distantPast
+        guard Date().timeIntervalSince(lastFetch) > Self.staleInterval else { return }
+
         inFlight.insert(code)
 
         Task {
@@ -69,6 +75,7 @@ final class HolidayService {
             let decoder = JSONDecoder()
             let holidays = try decoder.decode([PublicHoliday].self, from: data)
             cache[countryCode] = holidays
+            fetchedAt[countryCode] = Date()
             if let first = holidays.first {
                 nextHolidays[countryCode] = first
             }
