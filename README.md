@@ -1,10 +1,16 @@
-# Clock
+<p align="center">
+  <img src="screenshots/app-icon.png" width="128" alt="Clock app icon">
+</p>
 
-[![Build](https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml/badge.svg)](https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml)
-[![Release](https://img.shields.io/github/v/release/sven-ericmolzahn/Clock)](https://github.com/sven-ericmolzahn/Clock/releases/latest)
-[![License: MIT](https://img.shields.io/github/license/sven-ericmolzahn/Clock)](LICENSE)
+<h1 align="center">Clock</h1>
 
-A lightweight macOS menubar app for keeping track of time across the world.
+<p align="center">
+  <a href="https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml"><img src="https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/sven-ericmolzahn/Clock/releases/latest"><img src="https://img.shields.io/github/v/release/sven-ericmolzahn/Clock" alt="Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/sven-ericmolzahn/Clock" alt="License: MIT"></a>
+</p>
+
+<p align="center">A lightweight macOS menubar app for keeping track of time across the world.</p>
 
 Clock lives in your menu bar and shows the current time in a fully customizable format. Click it to see all your configured world clocks at a glance, complete with country flags, day/night indicators, and upcoming public holidays.
 
