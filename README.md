@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml"><img src="https://github.com/sven-ericmolzahn/Clock/actions/workflows/release.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/sven-ericmolzahn/Clock/actions/workflows/ci.yml"><img src="https://github.com/sven-ericmolzahn/Clock/actions/workflows/ci.yml/badge.svg" alt="Tests"></a>
   <a href="https://github.com/sven-ericmolzahn/Clock/releases/latest"><img src="https://img.shields.io/github/v/release/sven-ericmolzahn/Clock" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/sven-ericmolzahn/Clock" alt="License: MIT"></a>
 </p>
