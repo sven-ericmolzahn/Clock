@@ -25,4 +25,6 @@ jobs:
             -project "$PROJECT" \
             -scheme "$SCHEME" \
             -destination 'platform=macOS' \
-            -resultBundlePath TestResults
+            -resultBundlePath TestResults \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO
