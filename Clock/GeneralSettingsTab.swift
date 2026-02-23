@@ -40,6 +40,10 @@ struct GeneralSettingsTab: View {
                 }
             }
 
+            Section {
+                Toggle("Show world clocks before local time", isOn: $appState.worldClocksFirst)
+            }
+
             Section("World Clock Format") {
                 TextField("Date format pattern", text: $appState.worldClockFormat)
                 Text("Preview: \(worldClockPreview)")

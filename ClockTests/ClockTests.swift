@@ -152,6 +152,45 @@ struct ClockTests {
         #expect(state2.worldClockFormat == "h:mm a")
     }
 
+    // MARK: - AppState: worldClocksFirst
+
+    @Test func appStateWorldClocksAfterLocalByDefault() {
+        let state = AppState(defaults: freshDefaults())
+        state.menuBarFormat = "HH:mm"
+        state.worldClockFormat = "HH:mm"
+        state.addWorldClock(label: "Tokyo", timeZoneIdentifier: "Asia/Tokyo")
+        state.worldClocks[0].showInMenuBar = true
+
+        let text = state.menuBarText
+        let localRange = text.startIndex
+        let tokyoRange = text.range(of: "Tokyo")!
+        #expect(localRange < tokyoRange.lowerBound)
+    }
+
+    @Test func appStateWorldClocksBeforeLocalWhenEnabled() {
+        let state = AppState(defaults: freshDefaults())
+        state.menuBarFormat = "HH:mm"
+        state.worldClockFormat = "HH:mm"
+        state.worldClocksFirst = true
+        state.addWorldClock(label: "Tokyo", timeZoneIdentifier: "Asia/Tokyo")
+        state.worldClocks[0].showInMenuBar = true
+
+        let text = state.menuBarText
+        let tokyoRange = text.range(of: "Tokyo")!
+        // The local time is the last segment after the final " | "
+        let lastSeparator = text.range(of: " | ", options: .backwards)!
+        #expect(tokyoRange.lowerBound < lastSeparator.lowerBound)
+    }
+
+    @Test func appStatePersistsWorldClocksFirst() {
+        let defaults = freshDefaults()
+        let state = AppState(defaults: defaults)
+        state.worldClocksFirst = true
+
+        let state2 = AppState(defaults: defaults)
+        #expect(state2.worldClocksFirst == true)
+    }
+
     // MARK: - HolidayService: countryCode
 
     @Test func holidayServiceCountryCodeForKnownZone() {

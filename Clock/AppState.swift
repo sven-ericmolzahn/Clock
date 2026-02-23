@@ -16,6 +16,10 @@ final class AppState {
         didSet { defaults.set(worldClockFormat, forKey: "worldClockFormat") }
     }
 
+    var worldClocksFirst: Bool {
+        didSet { defaults.set(worldClocksFirst, forKey: "worldClocksFirst") }
+    }
+
     var currentDate: Date = Date()
 
     let holidayService = HolidayService()
@@ -27,7 +31,7 @@ final class AppState {
     var menuBarText: String {
         let formatter = DateFormatter()
         formatter.dateFormat = menuBarFormat
-        var text = formatter.string(from: currentDate)
+        let localText = formatter.string(from: currentDate)
 
         let parts = worldClocks.filter(\.showInMenuBar).compactMap { clock -> String? in
             guard let tz = clock.timeZone else { return nil }
@@ -35,11 +39,17 @@ final class AppState {
             formatter.dateFormat = worldClockFormat
             return "\(clock.label) \(formatter.string(from: currentDate))"
         }
-        if !parts.isEmpty {
-            text += " | " + parts.joined(separator: " | ")
+
+        if parts.isEmpty {
+            return localText
         }
 
-        return text
+        let worldText = parts.joined(separator: " | ")
+        if worldClocksFirst {
+            return worldText + " | " + localText
+        } else {
+            return localText + " | " + worldText
+        }
     }
 
     init(defaults: UserDefaults = .standard) {
@@ -47,6 +57,7 @@ final class AppState {
 
         self.menuBarFormat = defaults.string(forKey: "menuBarFormat") ?? "HH:mm"
         self.worldClockFormat = defaults.string(forKey: "worldClockFormat") ?? "HH:mm"
+        self.worldClocksFirst = defaults.bool(forKey: "worldClocksFirst")
 
         if let data = defaults.data(forKey: "worldClocks"),
            let decoded = try? JSONDecoder().decode([WorldClock].self, from: data) {
