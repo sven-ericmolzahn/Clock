@@ -80,8 +80,8 @@ struct WorldClockRow: View {
         let remoteDay = calendar.startOfDay(for: remoteDate)
         let diff = calendar.dateComponents([.day], from: localDay, to: remoteDay).day ?? 0
         switch diff {
-        case 1: return "Tomorrow"
-        case -1: return "Yesterday"
+        case 1: return String(localized: "Tomorrow")
+        case -1: return String(localized: "Yesterday")
         default: return nil
         }
     }
@@ -95,6 +95,7 @@ struct WorldClockRow: View {
     private var formattedTime: String {
         guard let tz = clock.timeZone else { return "—" }
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateFormat = appState.worldClockFormat
         formatter.timeZone = tz
         return formatter.string(from: displayDate)
@@ -105,8 +106,8 @@ struct WorldClockRow: View {
         let localOffset = TimeZone.current.secondsFromGMT(for: displayDate)
         let remoteOffset = tz.secondsFromGMT(for: displayDate)
         let diff = (remoteOffset - localOffset) / 3600
-        let sign = diff >= 0 ? "+" : ""
-        return "\(sign)\(diff)h from local"
+        let offset = "\(diff >= 0 ? "+" : "")\(diff)"
+        return String(localized: "\(offset)h from local")
     }
 
     private func holidayDateText(_ dateString: String) -> String {
@@ -115,15 +116,11 @@ struct WorldClockRow: View {
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         guard let date = inputFormatter.date(from: dateString) else { return dateString }
 
-        let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
-            return "Today"
-        } else if calendar.isDateInTomorrow(date) {
-            return "Tomorrow"
-        } else {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "d MMM"
-            return outputFormatter.string(from: date)
-        }
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: Locale.preferredLanguages[0])
+        outputFormatter.doesRelativeDateFormatting = true
+        outputFormatter.dateStyle = .short
+        outputFormatter.timeStyle = .none
+        return outputFormatter.string(from: date)
     }
 }

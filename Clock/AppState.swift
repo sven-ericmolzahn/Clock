@@ -30,6 +30,7 @@ final class AppState {
 
     var menuBarText: String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateFormat = menuBarFormat
         let localText = formatter.string(from: currentDate)
 

@@ -5,7 +5,7 @@ struct GeneralSettingsTab: View {
     @Environment(AppState.self) private var appState
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
-    private static let menuBarExamples: [(label: String, format: String)] = [
+    private static let menuBarExamples: [(label: LocalizedStringResource, format: String)] = [
         ("Time", "HH:mm"),
         ("12-hour", "h:mm a"),
         ("Seconds", "HH:mm:ss"),
@@ -77,12 +77,14 @@ struct GeneralSettingsTab: View {
 
     private var menuBarPreview: String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateFormat = appState.menuBarFormat
         return formatter.string(from: appState.currentDate)
     }
 
     private var worldClockPreview: String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateFormat = appState.worldClockFormat
         return formatter.string(from: appState.currentDate)
     }

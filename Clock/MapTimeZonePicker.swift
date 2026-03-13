@@ -99,7 +99,7 @@ struct MapTimeZonePicker: View {
             Image(systemName: "mappin.circle")
                 .foregroundStyle(.red)
             VStack(alignment: .leading, spacing: 1) {
-                Text(item.name ?? "Unknown")
+                Text(item.name ?? String(localized: "Unknown"))
                     .font(.callout)
                     .fontWeight(.medium)
                 if let subtitle = searchSubtitle(for: item) {

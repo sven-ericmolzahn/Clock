@@ -15,12 +15,14 @@ struct LocalClockView: View {
 
     private var formattedTime: String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateFormat = appState.menuBarFormat
         return formatter.string(from: appState.currentDate)
     }
 
     private var formattedDate: String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
         formatter.dateStyle = .full
         formatter.timeStyle = .none
         return formatter.string(from: appState.currentDate)

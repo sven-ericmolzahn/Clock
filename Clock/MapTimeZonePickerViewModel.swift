@@ -40,7 +40,7 @@ final class MapTimeZonePickerViewModel {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         guard let request = MKReverseGeocodingRequest(location: location) else {
             withAnimation(.spring(duration: 0.3)) {
-                errorMessage = "Invalid location"
+                errorMessage = String(localized: "Invalid location")
                 isGeocoding = false
             }
             return
@@ -55,13 +55,13 @@ final class MapTimeZonePickerViewModel {
 
                 guard let item = mapItems.first else {
                     withAnimation(.spring(duration: 0.3)) {
-                        self.errorMessage = "No location found"
+                        self.errorMessage = String(localized: "No location found")
                         self.isGeocoding = false
                     }
                     return
                 }
 
-                let name = item.name ?? "Unknown"
+                let name = item.name ?? String(localized: "Unknown")
                 let country = item.placemark.isoCountryCode
                 withAnimation(.spring(duration: 0.3)) {
                     self.geocodedCityName = name
@@ -120,7 +120,7 @@ final class MapTimeZonePickerViewModel {
         clearSearch()
 
         let coordinate = item.location.coordinate
-        let name = item.name ?? item.address?.shortAddress ?? "Unknown"
+        let name = item.name ?? item.address?.shortAddress ?? String(localized: "Unknown")
         let country = item.placemark.isoCountryCode
 
         withAnimation(.spring(duration: 0.3)) {
