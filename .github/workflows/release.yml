@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Import signing certificate
         env:
@@ -107,13 +107,13 @@ jobs:
           xcrun stapler staple "$RUNNER_TEMP/$APP_NAME.dmg"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Clock.dmg
           path: ${{ runner.temp }}/Clock.dmg
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ${{ runner.temp }}/Clock.dmg
           generate_release_notes: true
