@@ -105,8 +105,15 @@ struct WorldClockRow: View {
         guard let tz = clock.timeZone else { return "" }
         let localOffset = TimeZone.current.secondsFromGMT(for: displayDate)
         let remoteOffset = tz.secondsFromGMT(for: displayDate)
-        let diff = (remoteOffset - localOffset) / 3600
-        let offset = "\(diff >= 0 ? "+" : "")\(diff)"
+        let diffSeconds = remoteOffset - localOffset
+        let hours = diffSeconds / 3600
+        let remainingMinutes = abs(diffSeconds % 3600) / 60
+        let offset: String
+        if remainingMinutes == 0 {
+            offset = "\(hours >= 0 ? "+" : "")\(hours)"
+        } else {
+            offset = "\(diffSeconds >= 0 ? "+" : "-")\(abs(hours)).\(remainingMinutes == 30 ? "5" : "\(remainingMinutes)")"
+        }
         return String(localized: "\(offset)h from local")
     }
 
