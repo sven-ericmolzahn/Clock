@@ -7,6 +7,7 @@ struct LocalClockView: View {
         VStack(spacing: 4) {
             Text(formattedTime)
                 .font(.system(size: 36, weight: .light, design: .monospaced))
+                .fixedSize()
             Text(formattedDate)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -16,7 +17,7 @@ struct LocalClockView: View {
     private var formattedTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
-        formatter.dateFormat = appState.menuBarFormat
+        formatter.dateFormat = appState.localDisplayFormat
         return formatter.string(from: appState.currentDate)
     }
 

@@ -296,6 +296,71 @@ struct ClockTests {
         #expect(comps.minute == 30)
     }
 
+    // MARK: - FormatToken: parsing and serialization
+
+    @Test func formatTokenParseSimpleTime() {
+        let tokens = FormatToken.parse("HH:mm")
+        #expect(tokens.map(\.kind) == [.hours24, .colon, .minutes])
+    }
+
+    @Test func formatTokenParseWithWeekday() {
+        let tokens = FormatToken.parse("EEE HH:mm")
+        #expect(tokens.map(\.kind) == [.weekdayShort, .space, .hours24, .colon, .minutes])
+    }
+
+    @Test func formatTokenParseCalendarWeek() {
+        let tokens = FormatToken.parse("'W'w · EEE HH:mm")
+        #expect(tokens.map(\.kind) == [.calendarWeek, .middleDot, .weekdayShort, .space, .hours24, .colon, .minutes])
+    }
+
+    @Test func formatTokenParseISODate() {
+        let tokens = FormatToken.parse("yyyy-MM-dd HH:mm")
+        #expect(tokens.map(\.kind) == [.yearFull, .dash, .monthNumeric, .dash, .dayPadded, .space, .hours24, .colon, .minutes])
+    }
+
+    @Test func formatTokenParseFullDate() {
+        let tokens = FormatToken.parse("EEEE, d MMMM")
+        #expect(tokens.map(\.kind) == [.weekdayFull, .comma, .space, .dayOfMonth, .space, .monthFull])
+    }
+
+    @Test func formatTokenParse12Hour() {
+        let tokens = FormatToken.parse("h:mm a")
+        #expect(tokens.map(\.kind) == [.hours12, .colon, .minutes, .space, .ampm])
+    }
+
+    @Test func formatTokenParseSeconds() {
+        let tokens = FormatToken.parse("HH:mm:ss")
+        #expect(tokens.map(\.kind) == [.hours24, .colon, .minutes, .colon, .seconds])
+    }
+
+    @Test func formatTokenParseDateWithMonth() {
+        let tokens = FormatToken.parse("dd MMM HH:mm")
+        #expect(tokens.map(\.kind) == [.dayPadded, .space, .monthShort, .space, .hours24, .colon, .minutes])
+    }
+
+    @Test func formatTokenRoundTripAllPresets() {
+        let presets = [
+            "HH:mm", "h:mm a", "HH:mm:ss", "EEE HH:mm",
+            "'W'w · EEE HH:mm", "dd MMM HH:mm", "yyyy-MM-dd HH:mm", "EEEE, d MMMM",
+        ]
+        for preset in presets {
+            let tokens = FormatToken.parse(preset)
+            let roundTripped = FormatToken.icuString(from: tokens)
+            #expect(roundTripped == preset, "Round-trip failed for: \(preset) → \(roundTripped)")
+        }
+    }
+
+    @Test func formatTokenEmptyString() {
+        let tokens = FormatToken.parse("")
+        #expect(tokens.isEmpty)
+        #expect(FormatToken.icuString(from: []) == "")
+    }
+
+    @Test func formatTokenSerializeFromKinds() {
+        let tokens = [FormatToken(kind: .hours24), FormatToken(kind: .colon), FormatToken(kind: .minutes)]
+        #expect(FormatToken.icuString(from: tokens) == "HH:mm")
+    }
+
     // MARK: - Helpers
 
     private func makeDate(hour: Int, minute: Int) -> Date {

@@ -8,7 +8,7 @@ struct SettingsView: View {
             WorldClocksSettingsTab()
                 .tabItem { Label("World Clocks", systemImage: "globe") }
         }
-        .frame(width: 550, height: 560)
+        .frame(width: 550, height: 680)
         .onAppear { NSApp.activate() }
     }
 }

@@ -7,7 +7,7 @@ struct MenuBarPanel: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            LocalClockView()
+            CalendarView()
 
             if !appState.worldClocks.isEmpty {
                 converterField
@@ -32,7 +32,7 @@ struct MenuBarPanel: View {
             }
         }
         .padding()
-        .frame(width: 300)
+        .frame(minWidth: 250, idealWidth: 300)
     }
 
     // MARK: - Converter

@@ -28,6 +28,11 @@ final class AppState {
     private var lastHolidayRefresh: Date = .distantPast
     private let defaults: UserDefaults
 
+    /// The local-only format string for the overlay's large clock display.
+    var localDisplayFormat: String {
+        menuBarFormat
+    }
+
     var menuBarText: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: Locale.preferredLanguages[0])
