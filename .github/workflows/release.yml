@@ -113,7 +113,7 @@ jobs:
           path: ${{ runner.temp }}/Clock.dmg
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ runner.temp }}/Clock.dmg
           generate_release_notes: true
